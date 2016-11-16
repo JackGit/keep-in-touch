@@ -59,11 +59,9 @@
     touch: function () {
       var now = Date.now()
 
-      this.active = true
-
-      if (!this.lostTimerId) {
+      if (!this.active) {
+        this.active = true
         this.firstTouchTime = now
-
         if (this.everyCallback) {
           this._resetEveryTimer()
         }
