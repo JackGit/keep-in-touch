@@ -22,6 +22,7 @@
     this.lastTouchTime = null
     this.lostTimerId = null
     this.everyTimerId = null
+    this.connectedCallback = null
     this.lostCallback = null
     this.everyCallback = null
     this.active = false
@@ -56,12 +57,15 @@
       this.lostCallback && this.lostCallback(duration)
     },
 
+    // call this method to start and keep connection
     touch: function () {
       var now = Date.now()
 
       if (!this.active) {
         this.active = true
         this.firstTouchTime = now
+
+        this.connectedCallback && this.connectedCallback()
         if (this.everyCallback) {
           this._resetEveryTimer()
         }
@@ -71,6 +75,7 @@
       this._resetLostTimer()
     },
 
+    // when connected last every <internal>, will trigger the callback
     every: function (interval, callback) {
       this.everyInterval = interval
       this.everyCallback = callback
@@ -79,6 +84,12 @@
       }
     },
 
+    // when it gets the connection, will trigger the callback
+    connected: function (callback) {
+      this.connectedCallback = callback
+    },
+
+    // when lost the connection, will trigger the callback
     lost: function (callback) {
       this.lostCallback = callback
     },
